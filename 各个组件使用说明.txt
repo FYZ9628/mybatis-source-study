@@ -1,0 +1,115 @@
+一、mybatis-step-01
+手动将 mapper 接口方法和 sqlSession 会话绑定
+-> 根据 sqlSession 会话 MapperProxyFactory实例化一个MapperProxy
+-> MapperProxy实例类调起方法
+
+1、MapperProxyFactory 映射器代理工厂
+主要作用：动态生成代理类实例
+
+根据入参 sqlSession 得到与会话绑定的 mapper 接口
+
+2、MapperProxy 映射器代理类
+主要作用：调起方法
+
+根据入参 sqlSession 和 mapper 接口调起要执行的接口方法
+
+
+
+二、mybatis-step-02
+MapperRegistry 自动将指定包下 mapper 扫描注册
+-> DefaultSqlSessionFactory 生成 DefaultSqlSession
+-> 将 mapper 注册信息 和 DefaultSqlSession 绑定
+-> 根据 sqlSession 会话 MapperProxyFactory实例化一个MapperProxy
+-> MapperProxy实例类调起方法
+
+1、MapperRegistry 映射器注册机
+主要作用：扫描 dao 包并注册 mapper 接口，并提供获取 mapper 实例的方法
+
+调用了 MapperProxyFactory，而 MapperProxyFactory 又调用了 MapperProxy
+
+2、DefaultSqlSessionFactory 默认的Sql会话工厂
+主要作用：生成 sqlSession
+
+3、DefaultSqlSession 默认SqlSession实现类
+主要作用：将 mapper 注册信息与其绑定，提供 sql 的执行动作（增删改查）
+
+4、MapperProxyFactory 映射器代理工厂
+主要作用：动态生成代理类实例
+
+根据入参 sqlSession 得到与会话绑定的 mapper 接口
+
+5、MapperProxy 映射器代理类
+主要作用：调起方法
+
+根据入参 sqlSession 和 mapper 接口调起要执行的接口方法
+
+
+
+
+三、mybatis-step-03
+MapperRegistry 自动将指定包下 mapper 扫描注册
+-> DefaultSqlSessionFactory 生成 DefaultSqlSession
+-> 将 mapper 注册信息 和 DefaultSqlSession 绑定
+-> 根据 sqlSession 会话 MapperProxyFactory实例化一个MapperProxy
+-> MapperProxy实例类调起方法
+
+
+1、Resources 通过类加载器获得resource的辅助类
+主要作用：读取 mybatis 配置信息
+
+2、XMLConfigBuilder XML配置构建器，建造者模式
+主要作用：读取、解析 mybatis 配置信息和 mapper.xml 映射文件信息，并存放到 Configuration 中
+
+3、SqlSessionFactoryBuilder 构建SqlSessionFactory的工厂
+主要作用：构建SqlSessionFactory的工厂，并绑定 Configuration
+
+4、MapperRegistry 映射器注册机
+主要作用：绑定 Configuration，并提供获取 mapper 实例的方法
+
+调用了 MapperProxyFactory，而 MapperProxyFactory 又调用了 MapperProxy
+
+5、DefaultSqlSessionFactory 默认的Sql会话工厂
+主要作用：生成 sqlSession
+
+6、DefaultSqlSession 默认SqlSession实现类
+主要作用：将 Configuration 与其绑定，提供 sql 的执行动作（增删改查）
+
+7、MapperProxyFactory 映射器代理工厂
+主要作用：动态生成代理类实例
+
+根据入参 sqlSession 得到与会话绑定的 mapper 接口
+
+8、MapperProxy 映射器代理类
+主要作用：调起方法
+
+根据入参 sqlSession 和 mapper 接口以及 methodCache 调起要执行的接口方法
+
+9、MapperMethod 映射器方法
+主要作用：根据不同的sql操作（增删改查）指令，调用不同的 sqlSession 提供的执行动作（增删改查）
+
+10、MappedStatement 映射语句类
+主要作用：存放 mapper.xml 里面sql以及其他参数信息，同时关联 Configuration
+
+11、Configuration 配置项
+主要作用：注册 mapper接口，并提供获取 mapper 实例的方法
+
+
+
+
+四、mybatis-step-07
+读取配置文件 mybatis-config-datasource.xml 中的 环境信息 environments（configuration.setEnvironment）
+-> 设置事务管理器
+-> 设置数据源（使用反射设置数据源配置信息）
+-> 读取配置文件 mybatis-config-datasource.xml 中的 mappers 节点信息（configuration.addMappedStatement，configuration.addMapper）
+-> 创建执行器（SimpleExecutor）
+-> 创建会话（DefaultSqlSession）
+-> 获取映射器对象（sqlSession.getMapper()，得到的是代理类对象）
+-> 执行sql（userDao.queryUserInfoById(1L)）
+-> 起调 MapperProxy.invoke()
+-> 从缓存中映射方法
+-> 根据不同的SQL操作类型调不同的会话方法 sqlSession.selectOne()
+-> 根据前面获取的 MappedStatement 和 执行器 执行操作
+-> 通过调用 PreparedStatementHandler 或者 SimpleStatementHandler 调用 java 提供的方法调数据库接口执行操作
+-> 处理返回结果 DefaultResultSetHandler
+-> 最终通过 DefaultSqlSession 返回对象信息
+

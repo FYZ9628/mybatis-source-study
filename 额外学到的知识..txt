@@ -1,0 +1,15 @@
+1、10种设计模式
+创建型模式：工厂、单例、建造者
+结构型模式：适配、代理、组合、装饰器
+行为型模式：模板、策略、迭代器
+
+2、链式编码的写法
+
+mybatis-step-04 中 EnvironMent 的静态内部类 Builder 的写法
+
+使用时：
+ Environment.Builder environmentBuilder = new Environment.Builder(id)
+                        .transactionFactory(txFactory)
+                        .dataSource(dataSource);
+
+
